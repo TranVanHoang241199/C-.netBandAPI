@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BandAPI.Migrations
 {
     [DbContext(typeof(BandAlbumContext))]
-    [Migration("20220111073022_Intial")]
+    [Migration("20220111161421_Intial")]
     partial class Intial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -2,6 +2,7 @@ using BandAPI.DbContexts;
 using BandAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,12 @@ namespace BandAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers( setupAction =>
+            {
+                setupAction.ReturnHttpNotAcceptable = true;
+            }).AddXmlDataContractSerializerFormatters();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IBandAlbumRepository, BandAlbumRepository>();
             services.AddDbContext<BandAlbumContext>(options =>
             {
@@ -42,6 +48,17 @@ namespace BandAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else 
+            {
+                app.UseExceptionHandler(appBuilder =>
+                {
+                    appBuilder.Run(async c =>
+                    {
+                        c.Response.StatusCode = 500;
+                        await c.Response.WriteAsync("Something went horribly wrong, try again later");
+                    });
+                });
             }
 
             app.UseRouting();
