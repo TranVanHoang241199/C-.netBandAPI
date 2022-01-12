@@ -24,27 +24,14 @@ namespace BandAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<BandDto>> GetBands()
+        public ActionResult<IEnumerable<BandDto>> GetBands([FromQuery] BandsResourceParameters bandsResourceParameters)
         {
-           /* throw new Exception("testing exceptions");*/
-            var bandsFromRepo = _bandAlbumepository.GetBands();
-           /* var bandsDto = new List<BandDto>();
-
-            foreach (var band in bandsFromRepo)
-            {
-                bandsDto.Add(new BandDto()
-                {
-                    Id = band.Id,
-                    Name = band.Name,
-                    MainGenre = band.MainGenre,
-                    FoundedYearsAgo = $"{band.Founded.ToString("yyyy")}({band.Founded.GetYearsAgo()} years ago)"
-                });
-            }*/
+            var bandsFromRepo = _bandAlbumepository.GetBands(bandsResourceParameters);
 
             return Ok(_mapper.Map<IEnumerable<BandDto>>(bandsFromRepo));
         }
 
-        [HttpGet("{bandId}")]
+        [HttpGet("{bandId}", Name ="GetBand")]
         public IActionResult GetBand(Guid bandId)
         {
             var bandFromRepo = _bandAlbumepository.GetBand(bandId);
@@ -53,6 +40,18 @@ namespace BandAPI.Controllers
                 return NotFound();
 
             return Ok(bandFromRepo);
+        }
+
+        [HttpPost]
+        public ActionResult<BandDto> CreateBand([FromBody] BandForCreatingDto band)
+        {
+            var bandEntity = _mapper.Map<Entities.Band>(band);
+            _bandAlbumepository.AddBand(bandEntity);
+            _bandAlbumepository.Save();
+
+            var banToReturn = _mapper.Map<BandDto>(bandEntity);
+
+            return CreatedAtRoute("GetBand", new { bandId = banToReturn.Id}, banToReturn);
         }
     }
 }
