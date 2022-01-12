@@ -14,19 +14,19 @@ namespace BandAPI.Controllers
     [Route("api/bands")]
     public class BandsController : ControllerBase
     {
-        private readonly IBandAlbumRepository _bandAlbumepository;
+        private readonly IBandAlbumRepository _bandAlbumRepository;
         private readonly IMapper _mapper;
 
         public BandsController(IBandAlbumRepository bandAlbumRepository, IMapper mapper)
         {
-            _bandAlbumepository = bandAlbumRepository;
+            _bandAlbumRepository = bandAlbumRepository;
             _mapper = mapper;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<BandDto>> GetBands([FromQuery] BandsResourceParameters bandsResourceParameters)
         {
-            var bandsFromRepo = _bandAlbumepository.GetBands(bandsResourceParameters);
+            var bandsFromRepo = _bandAlbumRepository.GetBands(bandsResourceParameters);
 
             return Ok(_mapper.Map<IEnumerable<BandDto>>(bandsFromRepo));
         }
@@ -34,7 +34,7 @@ namespace BandAPI.Controllers
         [HttpGet("{bandId}", Name ="GetBand")]
         public IActionResult GetBand(Guid bandId)
         {
-            var bandFromRepo = _bandAlbumepository.GetBand(bandId);
+            var bandFromRepo = _bandAlbumRepository.GetBand(bandId);
 
             if (bandFromRepo == null)
                 return NotFound();
@@ -46,12 +46,19 @@ namespace BandAPI.Controllers
         public ActionResult<BandDto> CreateBand([FromBody] BandForCreatingDto band)
         {
             var bandEntity = _mapper.Map<Entities.Band>(band);
-            _bandAlbumepository.AddBand(bandEntity);
-            _bandAlbumepository.Save();
+            _bandAlbumRepository.AddBand(bandEntity);
+            _bandAlbumRepository.Save();
 
             var banToReturn = _mapper.Map<BandDto>(bandEntity);
 
             return CreatedAtRoute("GetBand", new { bandId = banToReturn.Id}, banToReturn);
+        }
+
+        [HttpOptions]
+        public IActionResult GetBandsOptions()
+        {
+            Response.Headers.Add("Allow", "GET,POST,DELETE,HEAD,OPTIONS");
+            return Ok();
         }
     }
 }

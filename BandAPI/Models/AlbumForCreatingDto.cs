@@ -1,13 +1,14 @@
-﻿using System;
+﻿using BandAPI.ValidationAttributes;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BandAPI.Models
 {
-    public class AlbumForCreatingDto
+
+    public class AlbumForCreatingDto : AlbumManipulationDto
     {
-        public String Title { get; set; }
-        public String Description { get; set; }
     }
 }
