@@ -135,3 +135,6 @@ D:\C#.Net_Project\BandAPI\BandAPI\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.Code
 D:\C#.Net_Project\BandAPI\BandAPI\bin\Debug\netcoreapp3.1\AutoMapper.dll
 D:\C#.Net_Project\BandAPI\BandAPI\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 D:\C#.Net_Project\BandAPI\BandAPI\bin\Debug\netcoreapp3.1\System.Runtime.CompilerServices.Unsafe.dll
+D:\C#.Net_Project\BandAPI\BandAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+D:\C#.Net_Project\BandAPI\BandAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\C#.Net_Project\BandAPI\BandAPI\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
